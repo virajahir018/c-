@@ -36,4 +36,9 @@ int main(){
     obj[0].getDetails();
     obj[2].getDetails();
 
+    
+    obj[1].getDetails();
+    obj[0].getDetails();
+    obj[2].getDetails();
+
 }
