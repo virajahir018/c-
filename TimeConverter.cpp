@@ -17,8 +17,8 @@ public:
 
 int main() {
     TimeConverter tc;
+    int totalSeconds;
     
-        int totalSeconds;
         cout << "Enter total seconds : ";
         cin >> totalSeconds;
         tc.secondsToHHMMSS(totalSeconds);
