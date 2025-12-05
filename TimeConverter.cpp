@@ -4,7 +4,7 @@ using namespace std;
 class TimeConverter {
 public:
 
-    // Convert seconds to HH:MM:SS
+
     void secondsToHHMMSS(int totalSeconds) {
         int hours = totalSeconds / 3600;
         totalSeconds %= 3600;
@@ -15,7 +15,7 @@ public:
         cout << "HH:MM:SS => " << hours << ":" << minutes << ":" << seconds << endl;
     }
 
-    // Convert HH:MM:SS to total seconds
+    
     int HHMMSSToSeconds(int hours, int minutes, int seconds) {
         return hours * 3600 + minutes * 60 + seconds;
     }
