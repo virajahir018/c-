@@ -26,13 +26,13 @@ public:
 
     void display (){
         cout<<"\n Company Information \n";
-        cout<<" ID : "<<comp_id<<endl;
-        cout<<" comp_name "<<comp_name<<endl;
-        cout<< " comp_staff_quantity : "<<comp_staff_quantity<<endl;
-        cout<< " comp_revenue (per year) : "<<comp_revenue<<endl;
-        cout<< " Imported Raw Diamonds (per year) : "<<comp_import_raw_diamonds<<endl;
-        cout<< " Export Diamonds (per year) : "<<comp_export_diamonds<<endl;
-        cout<< " CEO : "<<comp_ceo<<endl;
+        cout<< " ID                                : "<<comp_id<<endl;
+        cout<< " Comp_name                         : "<<comp_name<<endl;
+        cout<< " Comp_staff_quantity               : "<<comp_staff_quantity<<endl;
+        cout<< " Comp_revenue (per year)           : "<<comp_revenue<<endl;
+        cout<< " Imported Raw Diamonds (per year)  : "<<comp_import_raw_diamonds<<endl;
+        cout<< " Export Diamonds (per year)        : "<<comp_export_diamonds<<endl;
+        cout<< " CEO                               : "<<comp_ceo<<endl;
     }
 };
 
@@ -51,25 +51,25 @@ int main (){
 
        cout << "\nEnter details for Company " << i + 1 << ":\n";
 
-        cout << "Company ID: ";
+        cout << "Company ID : ";
         cin >> id;
 
-        cout << "Company Name: ";
+        cout << "Company Name : ";
         cin >> name;
 
-        cout << "Staff Quantity: ";
+        cout << "Staff Quantity : ";
         cin >> staff;
 
-        cout << "Annual Revenue: ";
+        cout << "Annual Revenue : ";
         cin >> revenue;
 
-        cout << "Imported Raw Diamonds (per year): ";
+        cout << "Imported Raw Diamonds (per year) : ";
         cin >> raw;
 
-        cout << "Export Diamonds (per year): ";
+        cout << "Export Diamonds (per year) : ";
         cin >> export_d;
 
-        cout << "CEO Name: ";
+        cout << "CEO Name : ";
         cin >> ceo;
 
         companies[i] = new Diamondcompanies(id, name, staff, revenue, raw, export_d, ceo);
