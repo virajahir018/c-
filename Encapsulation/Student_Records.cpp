@@ -140,7 +140,7 @@ int main() {
     manager.displayAll();
 
     manager.searchByRoll(102);
-    manager.searchByRoll(110);
+    manager.searchByRoll(101);
 
     return 0;
 }
