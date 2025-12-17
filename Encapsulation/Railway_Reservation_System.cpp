@@ -2,87 +2,78 @@
 #include <cstring>
 using namespace std;
 
-// ================= Train Class =================
 class Train {
 private:
-    int trainNumber;
-    char trainName[50];
+    int Tnumber;
+    char Tname[50];
     char source[50];
     char destination[50];
-    char trainTime[10];
+    char Ttime[10];
 
-    static int trainCount;   // static member
+    static int Tcount;
 
 public:
-    // Default Constructor
     Train() {
-        trainNumber = 0;
-        strcpy(trainName, "");
+        Tnumber = 0;
+        strcpy(Tname, "");
         strcpy(source, "");
         strcpy(destination, "");
-        strcpy(trainTime, "");
-        trainCount++;
+        strcpy(Ttime, "");
+        Tcount++;
     }
 
-    // Parameterized Constructor
-    Train(int num, const char* name, const char* src,
-          const char* dest, const char* time) {
-        trainNumber = num;
-        strcpy(trainName, name);
+    Train(int number, const char* name, const char* src,
+          const char* desti, const char* time) {
+        Tnumber = number;
+        strcpy(Tname, name);
         strcpy(source, src);
-        strcpy(destination, dest);
-        strcpy(trainTime, time);
-        trainCount++;
+        strcpy(destination, desti);
+        strcpy(Ttime, time);
+        Tcount++;
     }
 
-    // Destructor
     ~Train() {
-        trainCount--;
+        Tcount--;
     }
 
-    // Input Method
     void inputTrainDetails() {
-        cout << "Enter Train Number: ";
-        cin >> trainNumber;
+        cout << "Enter Train Number : ";
+        cin >> Tnumber;
         cin.ignore();
 
-        cout << "Enter Train Name: ";
-        cin.getline(trainName, 50);
+        cout << "Enter Train Name : ";
+        cin.getline(Tname, 50);
 
-        cout << "Enter Source: ";
+        cout << "Enter Train Source : ";
         cin.getline(source, 50);
 
-        cout << "Enter Destination: ";
+        cout << "Enter Train Destination : ";
         cin.getline(destination, 50);
 
-        cout << "Enter Train Time: ";
-        cin.getline(trainTime, 10);
+        cout << "Enter Train Time : ";
+        cin.getline(Ttime, 10);
     }
 
-    // Display Method
-    void displayTrainDetails() const {
-        cout << "\nTrain Number : " << trainNumber;
-        cout << "\nTrain Name   : " << trainName;
-        cout << "\nSource       : " << source;
-        cout << "\nDestination  : " << destination;
-        cout << "\nTime         : " << trainTime << endl;
+    void displayTrainsDetails() const {
+        cout << "Train Number : " << Tnumber << endl;
+        cout << "Train Name : " << Tname << endl;
+        cout << "Train Source : " << source << endl;
+        cout << "Train Destination : " << destination << endl;
+        cout << "Train Time : " << Ttime << endl << endl;
     }
 
-    // Getter for Train Number
-    int getTrainNumber() const {
-        return trainNumber;
+    int getTnumber() const {
+        return Tnumber;
     }
 
-    // Static method
-    static int getTrainCount() {
-        return trainCount;
+    static int getTcount() {
+        return Tcount;
     }
 };
 
-// Static member initialization
-int Train::trainCount = 0;
+int Train::Tcount = 0;
 
-// ================= RailwaySystem Class =================
+
 class RailwaySystem {
 private:
     Train trains[100];
@@ -97,7 +88,7 @@ public:
         if (totalTrains < 100) {
             trains[totalTrains].inputTrainDetails();
             totalTrains++;
-            cout << "Train added successfully!\n";
+            cout << "** Train added Successfully **\n";
         } else {
             cout << "Train list is full!\n";
         }
@@ -105,71 +96,67 @@ public:
 
     void displayAllTrains() const {
         if (totalTrains == 0) {
-            cout << "No train records found.\n";
+            cout << "No Train Found\n";
             return;
         }
 
         for (int i = 0; i < totalTrains; i++) {
-            cout << "\n--- Train " << i + 1 << " ---";
-            trains[i].displayTrainDetails();
+            cout << "\nTrain " << i + 1<< " :" << endl;
+            trains[i].displayTrainsDetails();
         }
     }
 
-    void searchTrainByNumber(int number) const {
+    void searchTrainsByNumber(int number) const {
         for (int i = 0; i < totalTrains; i++) {
-            if (trains[i].getTrainNumber() == number) {
-                cout << "\nTrain Found:";
-                trains[i].displayTrainDetails();
+            if (trains[i].getTnumber() == number) {
+                cout << "\n-- Train Found --\n\n";
+                trains[i].displayTrainsDetails();
                 return;
             }
         }
-        cout << "Train not found!\n";
+        cout << "Train Not Found\n";
     }
 };
 
-// ================= Main Function =================
+
 int main() {
-    RailwaySystem rs;
+    RailwaySystem RS;
     int choice, num;
 
     do {
-        cout << "\n--- Railway System Menu ---";
-        cout << "\n1. Add Train";
-        cout << "\n2. Display All Trains";
-        cout << "\n3. Search Train by Number";
-        cout << "\n4. Total Train Count";
-        cout << "\n5. Exit";
-        cout << "\nEnter choice: ";
+        cout << "\n=== Railway Reservation System Menu ===\n\n";
+        cout << "1. Add New Train Record\n";
+        cout << "2. Display All Train Records\n";
+        cout << "3. Search Train by Number\n";
+        cout << "4. Exit\n\n";
+
+        cout << "Enter your choice : ";
         cin >> choice;
 
         switch (choice) {
         case 1:
-            rs.addTrain();
+            RS.addTrain();
             break;
 
         case 2:
-            rs.displayAllTrains();
+            RS.displayAllTrains();
             break;
 
         case 3:
-            cout << "Enter Train Number to search: ";
+            cout << "Enter Train Number : ";
             cin >> num;
-            rs.searchTrainByNumber(num);
+            RS.searchTrainsByNumber(num);
             break;
 
         case 4:
-            cout << "Total Train Objects: "
-                 << Train::getTrainCount() << endl;
-            break;
-
-        case 5:
-            cout << "Exiting program...\n";
+            cout << "Exiting the program...\n";
             break;
 
         default:
             cout << "Invalid choice!\n";
         }
-    } while (choice != 5);
+
+    } while (choice != 4);
 
     return 0;
 }
