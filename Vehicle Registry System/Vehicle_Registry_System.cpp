@@ -1,8 +1,10 @@
 #include <iostream>
 using namespace std;
 
+// ------------------ Vehicle ------------------
+
 class Vehicle{
-    public:
+public:
     int vehicleID;
     string manufacturer;
     string model;
@@ -15,184 +17,189 @@ class Vehicle{
         manufacturer = "";
         model = "";
         year = 0;
-
         totalVehicles++;
     }
-    
+
     virtual void setData(){
-        cout << "Enter Vehicle Id : " ; cin >> vehicleID ;  
-        cout << "Enter Vehicle Manufacturer : " ; cin >> manufacturer ;  
-        cout << "Enter Vehicle Model : " ; cin >> model ;  
-        cout << "Enter Vehicle Year : " ; cin >> year ;  
+        cout << "\nEnter Vehicle Id : ";
+        cin >> vehicleID;
+        cin.ignore();
+
+        cout << "Enter Vehicle Manufacturer : ";
+        getline(cin, manufacturer);
+
+        cout << "Enter Vehicle Model : ";
+        getline(cin, model);
+
+        cout << "Enter Vehicle Year : ";
+        cin >> year;
+        cin.ignore();
     }
-    
+
     virtual void display(){
-        cout << " Vehicle Id : " << vehicleID << endl;  
-        cout << " Vehicle Manufacturer : " << manufacturer << endl;  
-        cout << " Vehicle Model : " << model << endl;  
-        cout << " Vehicle Year : " << year << endl;  
+        cout << "Vehicle Id : " << vehicleID << endl;
+        cout << "Manufacturer : " << manufacturer << endl;
+        cout << "Model : " << model << endl;
+        cout << "Year : " << year << endl;
     }
-    
-    int getID(){
+
+    int getID() const{
         return vehicleID;
     }
-        
+
     virtual ~Vehicle(){
         totalVehicles--;
     }
 };
 
-int Vehicle :: totalVehicles = 0;
+int Vehicle::totalVehicles = 0;
+
+// ------------------ Car ------------------
 
 class Car : public Vehicle{
-    public:
+public:
     string fuelType;
 
-    void setData()override{
+    void setData() override{
         Vehicle::setData();
-        cout << "Enter FuelType : "; cin >> fuelType ;
+        cout << "Enter Fuel Type : ";
+        cin >> fuelType;
     }
 
     void display() override{
         Vehicle::display();
-        cout << "FuelType : " << fuelType << endl;
+        cout << "Fuel Type : " << fuelType << endl;
     }
 };
 
-class ElectricCar :  public  Car {
-    public:
+// ------------------ Electric Car ------------------
+
+class ElectricCar : public Car{
+public:
     int batteryCapacity;
 
-    void setElectriCar(){
+    void setData() override{
         Car::setData();
-        cout << "Enter BatteryCapacity : "; cin >> batteryCapacity;
+        cout << "Enter Battery Capacity : ";
+        cin >> batteryCapacity;
     }
 
     void display() override{
         Car::display();
-        cout << "BatteryCapacity : "<< batteryCapacity << endl;
+        cout << "Battery Capacity : " << batteryCapacity << endl;
     }
 };
 
-class Aircraft{
-    public:
-    int flightRange;
-
-    void setAircraft(){
-        cout << "Enter FlightRange : "; cin >> flightRange;
-    }
-
-    void display(){
-        cout << "FlightRange : "<< flightRange << endl;
-    }
-};
-
-class FlyingCar {
-
-};
-
-class SportsCar : public ElectricCar{
-    public:
-    int topSpeed;
-
-    void setSportsCar(){
-        setElectriCar();
-        cout << "Enter TopSpeed : "; cin >> topSpeed;
-    }
-
-     void display(){
-        ElectricCar::display();
-        cout << "Enter TopSpeed : "<< topSpeed << endl;
-    }
-};
-
-class Sedan : public Car{
-
-    void display() override{
-        Car::display();
-    }
-};
-
-class SUV : public Car{
-
-};
-
+// ------------------ Vehicle Registry ------------------
 
 class VehicleRegistry{
     Vehicle* vehicles[50];
     int count;
 
-    public:
-
+public:
     VehicleRegistry(){
         count = 0;
     }
 
     void addVehicle(Vehicle* v){
-        if (count < 50)
-        {
+        if(count < 50){
             vehicles[count++] = v;
+            cout << "\n** Vehicle Added Successfully **\n";
+        } else {
+            cout << "\nVehicle Registry Full!\n";
+            delete v;
         }
-        
     }
 
     void displayAll(){
-        for (int i = 0; i < count; i++)
-        {
+        if(count == 0){
+            cout << "\nNo Vehicles Available!\n";
+            return;
+        }
+
+        cout << "\n--- Vehicle List ---\n\n";
+        for(int i = 0; i < count; i++){
             vehicles[i]->display();
-            cout << "\n";
+            cout << "------------------------\n\n";
         }
     }
 
-    void searchById(int id){
-        for (int i = 0; i < count; i++)
-        {
-            if (vehicles[i]->getID() == id)
-            {
+    void searchById(int id) const {
+        for(int i = 0; i < count; i++){
+            if(vehicles[i]->getID() == id){
+                cout << "\n--- Vehicle Found ---\n";
                 vehicles[i]->display();
                 return;
             }
         }
-        cout << "ID Not Found ! \n";
+        cout << "\nID Not Found!\n";
     }
 
     ~VehicleRegistry(){
-        for (int i = 0; i < count; i++)
-        {
-            delete  vehicles[i];
+        for(int i = 0; i < count; i++){
+            delete vehicles[i];
         }
     }
 };
 
-int main (){
+// ------------------ MAIN ------------------
+
+int main(){
     VehicleRegistry vr;
     int choice;
 
-    do
-    {
-        cout << "\n1. Add Car\n";
+    do{
+        cout << "\n====== Vehicle Registry System ======\n\n";
+        cout << "1. Add Car\n";
         cout << "2. Add Electric Car\n";
-        cout << "3. View All\n";
-        cout << "4. Search by ID\n";
-        cout << "5. Exit\n";
+        cout << "3. View All Vehicles\n";
+        cout << "4. Search Vehicle by ID\n";
+        cout << "5. Total Vehicles\n";
+        cout << "6. Exit\n";
 
-        cout << "Enter Choice : ";
+        cout << "\nEnter Choice : ";
         cin >> choice;
 
         Vehicle* v = nullptr;
         int id;
-    
-        switch (choice)
-        {
+
+        switch(choice){
         case 1:
             v = new Car();
+            break;
+
+        case 2:
+            v = new ElectricCar();
+            break;
+
+        case 3:
+            vr.displayAll();
+            break;
+
+        case 4:
+            cout << "Enter Vehicle ID : ";
+            cin >> id;
+            vr.searchById(id);
+            break;
+
+        case 5:
+            cout << "\nTotal Vehicles : " << Vehicle::totalVehicles << endl;
+            break;
+
+        case 6:
+            cout << "\nExiting Program...\n";
+            break;
+
+        default:
+            cout << "\nInvalid Choice!\n";
+        }
+
+        if (v) {
             v->setData();
             vr.addVehicle(v);
-            break;
-        
-        default:
-            break;
         }
-    } while (choice != 5);
-    
+
+    } while(choice != 6);
+
+    return 0;
 }
