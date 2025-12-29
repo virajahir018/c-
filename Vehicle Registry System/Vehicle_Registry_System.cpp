@@ -30,7 +30,7 @@ public:
     int getVehicleID() { return vehicleID; }
 
    void display() {
-        cout << "ID : "  << vehicleID<< " \n\nManufacturer : " << manufacturer<< ", \nModel : " << model<< ", \nYear : " << year << endl;
+        cout << "ID : "  << vehicleID<< " \nManufacturer : " << manufacturer<< ", \nModel : " << model<< ", \nYear : " << year << endl;
     }
 };
 
