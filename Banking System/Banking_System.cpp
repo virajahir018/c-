@@ -1,255 +1,259 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
 
-class BankAccount{
-    protected:
+class BankAccount
+{
+protected:
     int accountNumber;
     string accountHolderName;
     double balance;
 
-    public:
-
-    BankAccount(){
-        accountNumber = 0;
-        accountHolderName = "";
-        balance = 0.0;
-    }
-    
-    virtual void setData(){
-        cout << "\nEnter Account Number : "; 
-        cin >> accountNumber;
-        cin.ignore();
-        
-        cout << "Enter Account Name : "; 
-        getline(cin, accountHolderName);
-
-        cout << "Enter Account Balance : "; 
-        cin >> balance;
-        cin.ignore();
+public:
+    BankAccount(int number, string name, double b)
+    {
+        accountNumber = number;
+        accountHolderName = name;
+        balance = b;
     }
 
-    virtual void display(){
+    virtual void display()
+    {
         cout << "\n--- Account Details ---\n";
         cout << "Account Number : " << accountNumber << endl;
-        cout << "Account Name : " << accountHolderName << endl;
-        cout << "Account Balance : " << balance << endl;
+        cout << "Account Name   : " << accountHolderName << endl;
+        cout << "Account Balance: " << balance << endl;
     }
 
-
-    virtual void deposit(){
+    void deposit()
+    {
         double amount;
         cout << "Enter Deposit Amount : ";
         cin >> amount;
-        cin.ignore();
 
-       if (amount > 0)
-       {
-        balance += amount;
-        cout <<"Deposit successful!\n";
-       } else{
-        cout << "Invalid amount!\n";
-       } 
+        if (amount > 0)
+        {
+            balance += amount;
+            cout << "Deposit Successful!\n";
+        }
+        else
+        {
+            cout << "Invalid Amount!\n";
+        }
     }
-    
-    virtual void withdraw(){
+
+    virtual void withdraw()
+    {
         double amount;
         cout << "Enter Withdraw Amount : ";
         cin >> amount;
-        cin.ignore();
+
         if (amount > 0 && amount <= balance)
         {
             balance -= amount;
-            cout << "Withdrawal Successful\n";
-        }else{
-            cout << "Insufficient balance!\n";
+            cout << "Withdrawal Successful!\n";
         }
-        
-    }
-    
-    double getBalance(){
-        return balance;
+        else
+        {
+            cout << "Insufficient Balance!\n";
+        }
     }
 
-    virtual~BankAccount(){}
+    virtual ~BankAccount() {}
 };
 
-class SavingsAccount : public BankAccount{
-    protected:
+class SavingsAccount : public BankAccount
+{
     double interestRate;
 
-    public:
-    SavingsAccount(){
-        interestRate = 0.0;
+public:
+    SavingsAccount(int number, string name, double b, double rate)
+        : BankAccount(number, name, b)
+    {
+        interestRate = rate;
     }
 
-    void setData() override {
-        BankAccount::setData();
-        cout << "Enter Interest Rate (%) : ";
-        cin >> interestRate;
-        cin.ignore();
-    }
-
-    void display() override{
-        BankAccount::display();
-        cout << "Interest Rate : " << interestRate << "%" << endl;
-        cout << "Interest Is : " <<  calculateInterest() << endl;
-    }
-
-    double calculateInterest(){
+    double calculateInterest()
+    {
         return balance * interestRate / 100;
+    }
+
+    void display() override
+    {
+        BankAccount::display();
+        cout << "Interest Rate  : " << interestRate << "%" << endl;
+        cout << "Interest Amount: " << calculateInterest() << endl;
     }
 };
 
-class CheckingAccount : public BankAccount {
-    protected:
+class CheckingAccount : public BankAccount
+{
     double overdraftLimit;
 
-    public:
-    CheckingAccount(){
-        overdraftLimit = 0.0;
+public:
+    CheckingAccount(int number, string name, double b, double limit)
+        : BankAccount(number, name, b)
+    {
+        overdraftLimit = limit;
     }
 
-     void setData() override {
-        BankAccount::setData();
-        cout << "Enter Overdraft Limit : ";
-        cin >> overdraftLimit;
-        cin.ignore();
-    }
-
-    void display() override{
-        BankAccount::display();
-        cout << "Overdraft Limit : " << overdraftLimit << "%" << endl;
-    }
-
-    void withdraw() override{
+    void withdraw() override
+    {
         double amount;
         cout << "Enter Withdraw Amount : ";
         cin >> amount;
-        cin.ignore();
+
         if (balance - amount >= -overdraftLimit)
         {
             balance -= amount;
-            cout << "Withdrawal Successful \n";
-        } else {
-            cout << "Overdraft Limit Exceeded\n";
-        } 
+            cout << "Withdrawal Successful!\n";
+        }
+        else
+        {
+            cout << "Overdraft Limit Exceeded!\n";
+        }
+    }
+
+    void display() override
+    {
+        BankAccount::display();
+        cout << "Overdraft Limit: " << overdraftLimit << endl;
     }
 };
 
-class FixedDepositAccount : public BankAccount{
-    protected:
-    double term;
+class FixedDepositAccount : public BankAccount
+{
+    int term;
     double rate;
 
-    public:
-    FixedDepositAccount(){
-        term = 0.0;
-        rate = 0.0;
+public:
+    FixedDepositAccount(int number, string name, double b, int t, double r)
+        : BankAccount(number, name, b)
+    {
+        term = t;
+        rate = r;
     }
 
-    void setData()override{
-        BankAccount::setData();
-        cout << "Enter Term (duration in months) : ";
-         cin >> term;
-        cin.ignore();
-        cout << "Enter Rate : ";
-        cin >> rate;
-        cin.ignore();
+    double calculateInterest()
+    {
+        return(balance * rate * term) / ( 12 * 100);
     }
 
-    void display()override{
+    void display() override
+    {
         BankAccount::display();
-        cout << "Term : " << term << endl;
-        cout << "Rate : " << rate << endl;
+        cout << "Term (Duration In Months) : " << term << endl;
+        cout << "Interest Rate  : " << rate << "%" << endl;
         cout << "Interes Is : " << calculateInterest() << endl;
-    }
-
-    double calculateInterest(){
-        return balance * rate * term / (12 * 100);
     }
 };
 
-int main (){
-    BankAccount* Account = nullptr;
+int main()
+{
+    BankAccount *Bank = nullptr;
     int choice;
 
     do
     {
         cout << "\n===== BANK ACCOUNT MENU =====\n";
-        cout << "\n1. Create Savings Account";
-        cout << "\n2. Create Checking Account";
-        cout << "\n3. Create Fixed Deposit Account";
-        cout << "\n4. Deposit";
-        cout << "\n5. Withdraw";
-        cout << "\n6. Display Account Info";
-        cout << "\n0. Exit";
-        cout << "\nEnter choice : ";
+        cout << "1. Create Savings Account\n";
+        cout << "2. Create Checking Account\n";
+        cout << "3. Create Fixed Deposit Account\n";
+        cout << "4. Deposit\n";
+        cout << "5. Withdraw\n";
+        cout << "6. Display Account Info\n";
+        cout << "0. Exit\n";
+        cout << "Enter choice : ";
         cin >> choice;
+
+        int number, years;
+        string name;
+        double balance, rate, limit;
 
         switch (choice)
         {
-
         case 1:
-            delete Account;
-            Account = new SavingsAccount();
-            Account->setData();
-            cout << "Savings Account Created!\n";
-            break;  
+            if (Bank != nullptr) 
+            delete Bank;
+
+            cout << "Enter Account Number : ";
+            cin >> number;
+            cout << "Enter Account Name   : ";
+            cin >> name;
+            cout << "Enter Balance        : ";
+            cin >> balance;
+            cout << "Enter Interest Rate  : ";
+            cin >> rate;
+
+            Bank = new SavingsAccount(number, name, balance, rate);
+            break;
 
         case 2:
-            delete Account;
-            Account = new CheckingAccount();
-            Account->setData();
-            cout << "Checking Account Created!\n";
+            if (Bank != nullptr) 
+            delete Bank;
+
+            cout << "Enter Account Number : ";
+            cin >> number;
+            cout << "Enter Account Name   : ";
+            cin >> name;
+            cout << "Enter Balance        : ";
+            cin >> balance;
+            cout << "Enter Overdraft Limit: ";
+            cin >> limit;
+
+            Bank = new CheckingAccount(number, name, balance, limit);
             break;
 
         case 3:
-            delete Account;
-            Account = new FixedDepositAccount();
-            Account->setData();
-            cout << "Fixed Deposit Account Created!\n";
-            break;  
+            if (Bank != nullptr) 
+            delete Bank;
+
+            cout << "Enter Account Number : ";
+            cin >> number;
+            cout << "Enter Account Name   : ";
+            cin >> name;
+            cout << "Enter Deposit Amount : ";
+            cin >> balance;
+            cout << "Enter Term (Duration In Months) : ";
+            cin >> years;
+            cout << "Enter Interest Rate  : ";
+            cin >> rate;
+
+            Bank = new FixedDepositAccount(number, name, balance, years, rate);
+            break;
 
         case 4:
-            if (Account)
-            {
-                Account->deposit();
-            }
-            else{
-                cout << "Create account first!\n";
-            }
+            if (Bank != nullptr)
+                Bank->deposit();
+            else
+                cout << "Create Account First!\n";
             break;
 
         case 5:
-           if (Account)
-            {
-                Account->withdraw();
-            }
-            else{
-                cout << "Create account first!\n";
-            }
+            if (Bank != nullptr)
+                Bank->withdraw();
+            else
+                cout << "Create Account First!\n";
             break;
-        
+
         case 6:
-           if (Account)
-            {
-                Account->display();
-            }
-            else{
-                cout << "Create account first!\n";
-            }
+            if (Bank != nullptr)
+                Bank->display();
+            else
+                cout << "No Account Found!\n";
             break;
-        
+
         case 0:
-            cout << "Thank You!";
+            cout << "Thank You!\n";
             break;
+
         default:
-            cout << "Invalid choice!\n";
-            break;
+            cout << "Invalid Choice!\n";
         }
 
     } while (choice != 0);
 
-    delete Account;
+    if (Bank != nullptr)
+        delete Bank;
+
     return 0;
 }
